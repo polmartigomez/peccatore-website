@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Peccatore — The Art of Temptation</title>
+<meta name="description" content="Peccatore: pasta artesanal, pizza napolitana y la experiencia mediterránea más tentadora. Foodtruck, eventos privados y delivery en Barcelona." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://images.unsplash.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ============== TOKENS ============== */
+:root{
+  --black:#0a0a0a;
+  --black-2:#141210;
+  --black-3:#1a1814;
+  --line:rgba(255,255,255,0.08);
+  --line-strong:rgba(255,255,255,0.18);
+
+  --cream:#f1e8d6;
+  --cream-2:#e8dec7;
+  --cream-soft:#d9cfb6;
+  --paper:#f6efde;
+  --sand:#e7dcbf;
+
+  --tomato:#c8322d;
+  --tomato-deep:#9b2722;
+  --wine:#5d1414;
+  --olive:#5a5d3a;
+  --terracotta:#b86b48;
+
+  --muted:#7d7872;
+  --muted-light:#8c8576;
+
+  --vh:100vh;
+  --f-display:"Bebas Neue", Impact, sans-serif;
+  --f-body:"Inter", system-ui, sans-serif;
+  --f-italic:"Cormorant Garamond", Georgia, serif;
+
+  --track:0.149em;
+  --easing:cubic-bezier(.6,.05,.05,1);
+  --easing-out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--black)}
+body{
+  font-family:var(--f-body);
+  background:var(--black);
+  color:var(--cream);
+  font-weight:300;line-height:1.55;letter-spacing:.005em;
+  overflow-x:hidden;
+}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+
+.h-display{font-family:var(--f-display);font-weight:400;letter-spacing:var(--track);line-height:.92;text-transform:uppercase}
+.h-italic{font-family:var(--f-italic);font-style:italic;font-weight:300}
+.eyebrow{
+  font-family:var(--f-italic);font-style:italic;font-weight:400;font-size:1.05rem;
+  color:var(--tomato);letter-spacing:.02em;display:inline-flex;align-items:center;gap:14px;
+}
+.eyebrow::before{content:"";width:42px;height:1px;background:var(--tomato);display:inline-block}
+.label{font-family:var(--f-body);font-weight:500;font-size:.7rem;letter-spacing:.3em;text-transform:uppercase}
+
+/* ============== LOADER ============== */
+#loader{
+  position:fixed;inset:0;background:var(--black);z-index:10000;
+  display:grid;place-items:center;
+  transition:opacity .9s var(--easing-out), visibility .9s;
+}
+#loader.is-done{opacity:0;visibility:hidden}
+.loader-mark{
+  font-family:var(--f-display);
+  font-size:clamp(4rem,12vw,9rem);letter-spacing:var(--track);
+  position:relative;color:var(--cream);overflow:hidden;
+}
+.loader-mark span{display:inline-block;transform:translateY(110%);animation:rise .9s var(--easing-out) forwards}
+.loader-mark span:nth-child(1){animation-delay:.05s}
+.loader-mark span:nth-child(2){animation-delay:.1s}
+.loader-mark span:nth-child(3){animation-delay:.15s}
+.loader-mark span:nth-child(4){animation-delay:.2s}
+.loader-mark span:nth-child(5){animation-delay:.25s}
+.loader-mark span:nth-child(6){animation-delay:.3s}
+.loader-mark span:nth-child(7){animation-delay:.35s}
+.loader-mark span:nth-child(8){animation-delay:.4s}
+.loader-mark span:nth-child(9){animation-delay:.45s}
+.loader-line{position:fixed;left:0;right:0;bottom:0;height:2px;background:var(--tomato);transform:scaleX(0);transform-origin:left;animation:fillx 1.6s var(--easing) forwards}
+.loader-meta{position:fixed;bottom:34px;left:0;right:0;text-align:center;font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
+@keyframes rise{to{transform:translateY(0)}}
+@keyframes fillx{to{transform:scaleX(1)}}
+
+/* ============== NAV ============== */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:22px 40px;display:flex;align-items:center;justify-content:space-between;
+  transition:background .4s var(--easing-out), padding .4s var(--easing-out), border-color .4s, color .4s;
+  border-bottom:1px solid transparent;color:var(--cream);
+}
+.nav.is-scrolled{
+  background:rgba(10,10,10,.82);backdrop-filter:blur(14px) saturate(140%);
+  border-bottom-color:var(--line);padding:14px 40px;
+}
+.nav.is-light{color:var(--black);}
+.nav.is-light.is-scrolled{background:rgba(241,232,214,.92);border-bottom-color:rgba(0,0,0,.08)}
+.nav__brand{font-family:var(--f-display);font-size:1.6rem;letter-spacing:var(--track)}
+.nav__links{display:flex;gap:28px;align-items:center}
+.nav__links a{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;position:relative;padding:6px 0;font-weight:500}
+.nav__links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--tomato);transition:width .35s var(--easing-out)}
+.nav__links a:hover::after{width:100%}
+.nav__cta{
+  background:var(--tomato);color:#fff;padding:12px 22px;
+  font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;font-weight:600;
+  transition:background .25s, transform .25s;
+}
+.nav__cta:hover{background:var(--tomato-deep);transform:translateY(-2px)}
+@media (max-width:880px){.nav,.nav.is-scrolled{padding:14px 20px}.nav__links{display:none}.nav__cta{padding:10px 14px;font-size:.62rem}}
+
+/* ============== HERO (VIDEO ONLY) ============== */
+.hero{
+  position:relative;height:100vh;height:var(--vh);min-height:680px;
+  overflow:hidden;background:#000;
+}
+.hero__video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:contrast(1.06) saturate(1.05) brightness(.9);
+}
+.hero__poster{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;
+  filter:contrast(1.08) saturate(1.05) brightness(.7);
+}
+.hero__veil{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(0,0,0,.4), transparent 60%),
+    linear-gradient(180deg, rgba(0,0,0,.25) 0%, transparent 25%, rgba(0,0,0,.55) 100%);
+}
+.hero__grain{
+  position:absolute;inset:0;pointer-events:none;mix-blend-mode:overlay;opacity:.16;z-index:2;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.55'/></svg>");
+}
+
+/* ============== BUTTONS ============== */
+.btn{
+  display:inline-flex;align-items:center;gap:14px;padding:18px 26px;
+  font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;font-weight:600;
+  transition:background .25s,color .25s,transform .35s var(--easing-out),border-color .25s;
+  border:1px solid transparent;cursor:pointer;
+}
+.btn svg{width:14px;height:14px;transition:transform .35s var(--easing-out)}
+.btn:hover{transform:translateY(-3px)}
+.btn:hover svg{transform:translateX(6px)}
+.btn--red{background:var(--tomato);color:#fff}
+.btn--red:hover{background:var(--tomato-deep)}
+.btn--ghost{background:transparent;border-color:var(--cream);color:var(--cream)}
+.btn--ghost:hover{background:var(--cream);color:var(--black);border-color:var(--cream)}
+.btn--dark{background:var(--black);color:var(--cream)}
+.btn--dark:hover{background:#000}
+.btn--ghost-dark{background:transparent;border-color:var(--black);color:var(--black)}
+.btn--ghost-dark:hover{background:var(--black);color:var(--cream)}
+
+/* ============== MARQUEE ============== */
+.marquee{
+  background:var(--tomato);color:var(--cream);
+  padding:22px 0;border-top:1px solid var(--tomato-deep);border-bottom:1px solid var(--tomato-deep);
+  overflow:hidden;position:relative;user-select:none;
+}
+.marquee__track{
+  display:flex;gap:50px;width:max-content;
+  animation:slide 32s linear infinite;
+  font-family:var(--f-display);font-size:1.7rem;letter-spacing:var(--track);
+}
+.marquee__track span{display:flex;align-items:center;gap:50px;white-space:nowrap}
+.marquee__track i{font-style:normal;font-family:var(--f-italic);font-style:italic;font-weight:400;font-size:1.4rem;opacity:.85}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ============== SECTIONS ============== */
+section{position:relative}
+.wrap{max-width:1320px;margin:0 auto;padding:0 40px}
+.section-head{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;margin-bottom:60px}
+.section-head h2{font-family:var(--f-display);font-size:clamp(3.5rem,9vw,9rem);letter-spacing:var(--track);line-height:.9}
+.section-head p{max-width:420px;font-size:1.02rem;line-height:1.55}
+@media (max-width:780px){.section-head{grid-template-columns:1fr}.wrap{padding:0 20px}}
+
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 1s var(--easing-out), transform 1s var(--easing-out)}
+.reveal.is-in{opacity:1;transform:none}
+.reveal-stagger > *{opacity:0;transform:translateY(40px);transition:opacity .9s var(--easing-out), transform .9s var(--easing-out)}
+.reveal-stagger.is-in > *{opacity:1;transform:none}
+.reveal-stagger.is-in > *:nth-child(1){transition-delay:.05s}
+.reveal-stagger.is-in > *:nth-child(2){transition-delay:.13s}
+.reveal-stagger.is-in > *:nth-child(3){transition-delay:.21s}
+.reveal-stagger.is-in > *:nth-child(4){transition-delay:.29s}
+.reveal-stagger.is-in > *:nth-child(5){transition-delay:.37s}
+.reveal-stagger.is-in > *:nth-child(6){transition-delay:.45s}
+
+/* ============== MANIFESTO (NOSOTROS) ============== */
+.manifesto{padding:170px 0;background:var(--cream);color:var(--black);position:relative;overflow:hidden}
+.manifesto::before{
+  content:"PECCATO";position:absolute;left:-3%;top:26%;
+  font-family:var(--f-display);font-size:34vw;letter-spacing:var(--track);
+  color:rgba(0,0,0,.05);pointer-events:none;line-height:1;user-select:none;
+}
+.manifesto__grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;position:relative}
+.manifesto__quote{
+  font-family:var(--f-italic);font-style:italic;font-weight:400;
+  font-size:clamp(2rem,4.4vw,4rem);line-height:1.12;color:var(--black);
+}
+.manifesto__quote em{color:var(--tomato);font-style:italic}
+.manifesto__body{padding-top:30px}
+.manifesto__body p{color:#3a3833;font-size:1.05rem;margin-bottom:18px;max-width:430px}
+.manifesto__band{position:relative;z-index:2;background:var(--black);margin-top:100px;padding:64px 0}
+.manifesto__nums{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.manifesto__nums div{display:flex;flex-direction:column;gap:10px;padding:6px 44px}
+.manifesto__nums div + div{border-left:1px solid var(--line)}
+.manifesto__nums strong{font-family:var(--f-display);font-size:3.2rem;letter-spacing:var(--track);color:var(--tomato);line-height:1}
+.manifesto__nums span{font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cream-soft);font-weight:500}
+@media (max-width:980px){.manifesto__grid{grid-template-columns:1fr;gap:30px}}
+@media (max-width:680px){
+  .manifesto__nums{grid-template-columns:1fr}
+  .manifesto__nums div{padding:22px 16px}
+  .manifesto__nums div + div{border-left:0;border-top:1px solid var(--line)}
+}
+
+/* ============== CARTA ============== */
+.carta{padding:140px 0;background:var(--cream);color:var(--black);border-top:1px solid rgba(0,0,0,.06)}
+.carta .section-head h2{color:var(--black)}
+.carta .section-head p{color:#3a3833}
+.tabs{display:flex;gap:0;border-bottom:1px solid rgba(0,0,0,.12);margin-bottom:50px;flex-wrap:wrap}
+.tab{
+  padding:18px 22px;font-size:.74rem;letter-spacing:.3em;text-transform:uppercase;font-weight:500;
+  color:#7a766f;position:relative;transition:color .25s;
+}
+.tab::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--tomato);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--easing-out)}
+.tab.is-active{color:var(--black)}
+.tab.is-active::after{transform:scaleX(1)}
+.tab:hover{color:var(--black)}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 80px}
+.menu-item{
+  padding:26px 0;border-bottom:1px dashed rgba(0,0,0,.18);
+  display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start;position:relative;
+  transition:padding .35s var(--easing-out);
+}
+.menu-item:hover{padding-left:14px}
+.menu-item__name{font-family:var(--f-italic);font-style:italic;font-weight:400;font-size:1.45rem;color:var(--black);margin-bottom:6px}
+.menu-item__desc{color:#4d4842;font-size:.92rem;line-height:1.55;max-width:90%}
+.menu-item__price{font-family:var(--f-display);font-size:1.6rem;letter-spacing:var(--track);color:var(--black)}
+.menu-item__tag{
+  display:inline-block;margin-top:10px;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;
+  padding:4px 10px;border:1px solid rgba(0,0,0,.18);color:#5a5650;font-weight:500;
+}
+.menu-item__tag--new{border-color:var(--tomato);color:var(--tomato)}
+.menu-item__tag--firma{border-color:var(--olive);color:var(--olive);background:rgba(90,93,58,.08)}
+.menu-pane{display:none;animation:fadepane .55s var(--easing-out)}
+.menu-pane.is-active{display:block}
+@keyframes fadepane{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@media (max-width:880px){.menu-grid{grid-template-columns:1fr;gap:0}}
+
+/* ============== FOODTRUCK ============== */
+.experience{position:relative;background:var(--black-2);min-height:90vh;display:grid;align-items:stretch;overflow:hidden}
+.experience__layout{display:grid;grid-template-columns:1fr 1fr;min-height:90vh}
+.experience__media{position:relative;overflow:hidden;background:#000}
+.experience__media img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transition:transform 1.5s var(--easing-out);
+}
+.experience__media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,rgba(20,18,16,.5) 100%)}
+.experience__text{padding:120px 80px;display:flex;flex-direction:column;justify-content:center;background:var(--black-2)}
+.experience__text h2{font-family:var(--f-display);font-size:clamp(3rem,6vw,6rem);letter-spacing:var(--track);line-height:.92;margin:18px 0 30px;color:var(--cream)}
+.experience__text h2 em{font-family:var(--f-italic);font-style:italic;font-weight:400;display:block;font-size:.45em;color:var(--tomato);letter-spacing:.02em;margin-bottom:14px;text-transform:none;line-height:1}
+.experience__text p{color:var(--cream-soft);font-size:1.05rem;line-height:1.6;margin-bottom:18px;max-width:480px}
+.experience__list{margin:30px 0 40px;list-style:none}
+.experience__list li{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500}
+.experience__list li::before{content:"";width:6px;height:6px;background:var(--tomato);border-radius:50%}
+.experience__cta{display:flex;gap:14px;flex-wrap:wrap}
+@media (max-width:980px){.experience__layout{grid-template-columns:1fr}.experience__media{height:60vh}.experience__text{padding:80px 30px}}
+
+/* ============== INSTAGRAM ============== */
+.ig{padding:140px 0;background:var(--black);position:relative;overflow:hidden}
+.ig__card{max-width:900px;margin:0 auto 56px;display:flex;align-items:center;gap:56px}
+.ig__avatar{
+  width:150px;height:150px;border-radius:50%;flex-shrink:0;
+  background:#000;border:1px solid var(--line-strong);
+  display:grid;place-items:center;box-shadow:0 0 0 5px rgba(241,232,214,.04);
+  position:relative;overflow:hidden;
+}
+.ig__avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ig__avatar svg{width:58%;height:58%}
+.ig__info{flex:1;min-width:0}
+.ig__row1{display:flex;align-items:center;gap:24px;margin-bottom:22px;flex-wrap:wrap}
+.ig__name{font-size:1.55rem;font-weight:400;color:var(--cream);letter-spacing:.01em}
+.ig__follow{
+  display:inline-flex;align-items:center;gap:9px;
+  background:var(--tomato);color:#fff;padding:11px 26px;
+  font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;font-weight:600;
+  transition:background .25s,transform .3s var(--easing-out);
+}
+.ig__follow:hover{background:var(--tomato-deep);transform:translateY(-2px)}
+.ig__follow svg{width:15px;height:15px}
+.ig__stats{display:flex;gap:40px;margin-bottom:20px;flex-wrap:wrap}
+.ig__stats div{font-size:1rem;color:var(--cream-soft)}
+.ig__stats strong{color:var(--cream);font-weight:600}
+.ig__cat{font-size:.9rem;color:var(--muted-light);margin-bottom:6px}
+.ig__bio{color:var(--cream);font-size:1rem;line-height:1.55}
+.ig__bio em{font-family:var(--f-italic);font-style:italic;color:var(--tomato);font-size:1.12rem}
+@media (max-width:680px){
+  .ig__card{flex-direction:column;text-align:center;gap:28px;margin-bottom:40px}
+  .ig__row1,.ig__stats{justify-content:center}
+  .ig__avatar{width:120px;height:120px}
+}
+/* ================================================================
+   FEED EN DIRECTO — cómo activarlo (auto-actualización real):
+   1. Entra en https://behold.so y crea una cuenta gratis.
+   2. Conecta la cuenta @peccatore.bcn (login con Instagram).
+   3. Te darán un código tipo:
+        <script src="https://w.behold.so/widget.js" type="module"></script>
+        <div data-behold-id="TU_ID"></div>
+   4. Sustituye el bloque <div class="ig__grid">...</div> de abajo
+      por ese código. A partir de ahí, cada post nuevo aparece solo.
+   (Alternativa: SnapWidget — https://snapwidget.com)
+   ================================================================ */
+.ig__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:900px;margin:0 auto}
+.ig__post{position:relative;aspect-ratio:1;overflow:hidden;background:#1a1814;display:block}
+.ig__post img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--easing-out),filter .4s}
+.ig__post:hover img{transform:scale(1.06);filter:brightness(.42)}
+.ig__overlay{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:22px;
+  color:#fff;font-weight:600;font-size:.92rem;
+  opacity:0;transition:opacity .3s;z-index:2;
+}
+.ig__post:hover .ig__overlay{opacity:1}
+.ig__overlay span{display:inline-flex;align-items:center;gap:7px}
+.ig__overlay svg{width:19px;height:19px}
+.ig__type{position:absolute;top:10px;right:10px;z-index:3;color:#fff;opacity:.95;filter:drop-shadow(0 1px 4px rgba(0,0,0,.7))}
+.ig__type svg{width:20px;height:20px}
+.ig__foot{margin-top:46px;display:flex;justify-content:center}
+@media (max-width:880px){.ig__grid{max-width:100%}}
+
+/* ============== RUTA — EN GIRA ============== */
+.ruta{padding:110px 0;background:var(--black-2);position:relative;overflow:hidden}
+.ruta::before{
+  content:"GIRA 2026";position:absolute;right:-3%;bottom:5%;
+  font-family:var(--f-display);font-size:14vw;letter-spacing:var(--track);
+  color:rgba(255,255,255,.022);pointer-events:none;line-height:1;user-select:none;white-space:nowrap;
+}
+.ruta__list{border-top:1px solid var(--line-strong);position:relative;z-index:1}
+.ruta__row{
+  display:grid;grid-template-columns:135px 1fr 220px 96px;gap:22px;align-items:center;
+  padding:19px 16px;border-bottom:1px solid var(--line);
+  position:relative;transition:padding .4s var(--easing-out),background .35s var(--easing-out);
+}
+.ruta__row:hover{background:var(--tomato);padding-left:28px}
+.ruta__date{font-family:var(--f-display);font-size:1.05rem;letter-spacing:var(--track);color:var(--tomato);transition:color .3s}
+.ruta__row:hover .ruta__date{color:#fff}
+.ruta__name{font-family:var(--f-display);font-size:clamp(1.25rem,2vw,1.9rem);letter-spacing:var(--track);line-height:.98;color:var(--cream);transition:color .3s}
+.ruta__row:hover .ruta__name{color:#fff}
+.ruta__place{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-soft);font-weight:500;transition:color .3s}
+.ruta__row:hover .ruta__place{color:#fff}
+.ruta__tag{
+  justify-self:end;font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;
+  padding:6px 10px;border:1px solid var(--line-strong);color:var(--cream-soft);transition:all .3s;white-space:nowrap;
+}
+.ruta__row:hover .ruta__tag{border-color:#fff;color:#fff}
+.ruta__foot{
+  margin-top:42px;display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:22px;position:relative;z-index:1;
+}
+.ruta__foot p{font-family:var(--f-italic);font-style:italic;font-size:1.15rem;color:var(--cream-soft);max-width:380px}
+.ruta__foot p em{color:var(--tomato);font-style:italic}
+@media (max-width:880px){
+  .ruta__row{grid-template-columns:1fr;gap:4px;padding:15px 12px}
+  .ruta__row:hover{padding-left:12px}
+  .ruta__tag{justify-self:start;margin-top:6px}
+}
+
+/* ============== GALLERY ============== */
+.gallery{padding:120px 0;background:var(--black);border-top:1px solid var(--line)}
+.gallery__strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.gallery__strip > div{position:relative;overflow:hidden;aspect-ratio:3/4;background:#222}
+.gallery__strip > div:nth-child(1){grid-row:span 2;aspect-ratio:3/8.2}
+.gallery__strip > div:nth-child(4){grid-row:span 2;aspect-ratio:3/8.2}
+.gallery__strip img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--easing-out), filter .6s}
+.gallery__strip > div:hover img{transform:scale(1.08);filter:brightness(.65)}
+.gallery__strip > div::after{
+  content:attr(data-label);position:absolute;left:18px;bottom:18px;
+  font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;color:#fff;
+  opacity:0;transform:translateY(14px);transition:all .4s var(--easing-out);font-weight:600;
+}
+.gallery__strip > div:hover::after{opacity:1;transform:none}
+@media (max-width:880px){.gallery__strip{grid-template-columns:repeat(2,1fr)}.gallery__strip>div:nth-child(1),.gallery__strip>div:nth-child(4){grid-row:auto;aspect-ratio:3/4}}
+
+/* ============== CTA DUAL ============== */
+.cta{padding:0;display:grid;grid-template-columns:1fr 1fr;min-height:540px}
+.cta__block{position:relative;display:flex;flex-direction:column;justify-content:center;padding:90px 60px;overflow:hidden}
+.cta__block--red{background:var(--tomato);color:var(--cream)}
+.cta__block--red::before{
+  content:"";position:absolute;inset:0;
+  background:url("https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=1600&q=80") center/cover;
+  opacity:.16;mix-blend-mode:multiply;
+}
+.cta__block--dark{background:var(--black);color:var(--cream)}
+.cta__block--dark::before{
+  content:"";position:absolute;inset:0;
+  background:url("https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=1600&q=80") center/cover;
+  opacity:.18;
+}
+.cta__block > *{position:relative;z-index:1}
+.cta__title{font-family:var(--f-display);font-size:clamp(2.6rem,5.2vw,5rem);letter-spacing:var(--track);line-height:.9;margin-bottom:22px}
+.cta__title em{font-family:var(--f-italic);font-style:italic;font-weight:400;display:block;font-size:.4em;letter-spacing:.02em;margin-bottom:12px;text-transform:none;opacity:.85;line-height:1}
+.cta__desc{font-size:1rem;margin-bottom:30px;max-width:380px;line-height:1.55;opacity:.92}
+.cta__sub{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;margin-top:22px;opacity:.75;font-weight:500}
+@media (max-width:880px){.cta{grid-template-columns:1fr}.cta__block{padding:70px 30px}}
+
+/* ============== FOOTER ============== */
+footer{padding:80px 40px 40px;background:#050505;color:var(--cream-soft);border-top:1px solid var(--line)}
+.foot__top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:60px;margin-bottom:60px;max-width:1320px;margin-left:auto;margin-right:auto}
+.foot__brand .h-display{font-size:2.6rem;color:var(--cream);margin-bottom:8px}
+.foot__brand p{font-family:var(--f-italic);font-style:italic;font-size:1rem;color:var(--tomato);margin-bottom:18px}
+.foot__brand small{font-size:.85rem;display:block;max-width:280px;line-height:1.55}
+.foot__col h4{font-family:var(--f-display);font-size:1.1rem;letter-spacing:var(--track);color:var(--cream);margin-bottom:18px}
+.foot__col ul{list-style:none}
+.foot__col li{margin-bottom:10px;font-size:.92rem}
+.foot__col a:hover{color:var(--tomato)}
+.foot__bottom{display:flex;justify-content:space-between;align-items:center;padding-top:30px;border-top:1px solid var(--line);font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;max-width:1320px;margin:0 auto}
+.foot__social{display:flex;gap:14px}
+.foot__social a{width:36px;height:36px;border:1px solid var(--line);display:grid;place-items:center;transition:all .25s}
+.foot__social a:hover{background:var(--tomato);border-color:var(--tomato);color:#fff}
+.foot__social svg{width:14px;height:14px}
+@media (max-width:880px){.foot__top{grid-template-columns:1fr 1fr;gap:30px}.foot__bottom{flex-direction:column;gap:14px;text-align:center}}
+
+::selection{background:var(--tomato);color:var(--cream)}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-mark"><span>P</span><span>E</span><span>C</span><span>C</span><span>A</span><span>T</span><span>O</span><span>R</span><span>E</span></div>
+  <div class="loader-line"></div>
+  <div class="loader-meta">The Art of Temptation · Barcelona</div>
+</div>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <a href="#hero" class="nav__brand">PECCATORE</a>
+  <nav class="nav__links">
+    <a href="#manifesto">Nosotros</a>
+    <a href="#carta">La carta</a>
+    <a href="#truck">Foodtruck</a>
+    <a href="#instagram">Instagram</a>
+    <a href="#ruta">La ruta</a>
+  </nav>
+  <a href="#cta" class="nav__cta">Reservar</a>
+</header>
+
+<!-- HERO (SOLO VÍDEO) -->
+<section class="hero" id="hero">
+  <img class="hero__poster" src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=1800&q=80" alt="" />
+  <video class="hero__video" autoplay muted loop playsinline preload="auto"
+    poster="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=1800&q=80">
+    <!-- Vídeo de demo (pizza/pasta). Sustituye por tu propio mp4 cuando lo tengas. -->
+    <source src="https://assets.mixkit.co/videos/4144/4144-720.mp4" type="video/mp4" />
+    <source src="https://assets.mixkit.co/videos/4146/4146-720.mp4" type="video/mp4" />
+    <source src="https://videos.pexels.com/video-files/3296484/3296484-hd_1920_1080_25fps.mp4" type="video/mp4" />
+  </video>
+  <div class="hero__veil"></div>
+  <div class="hero__grain"></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee__track">
+    <span>Pasta artesanal <i>·</i> Pizza napolitana <i>·</i> Vinos italianos <i>·</i> Foodtruck Barcelona <i>·</i> Delivery <i>·</i> The Art of Temptation <i>·</i></span>
+    <span>Pasta artesanal <i>·</i> Pizza napolitana <i>·</i> Vinos italianos <i>·</i> Foodtruck Barcelona <i>·</i> Delivery <i>·</i> The Art of Temptation <i>·</i></span>
+  </div>
+</div>
+
+<!-- NOSOTROS (MANIFESTO) -->
+<section class="manifesto" id="manifesto">
+  <div class="wrap">
+    <div class="manifesto__grid">
+      <div class="reveal">
+        <div class="eyebrow" style="margin-bottom:24px">Nosotros</div>
+        <p class="manifesto__quote">"Cocinar bien es el único <em>pecado</em> que todos deberíamos cometer."</p>
+      </div>
+      <div class="manifesto__body reveal">
+        <p>Peccatore nace con una idea simple: la cocina italiana no necesita disfrazarse. Necesita producto, fuego y técnica. Lo demás sobra.</p>
+        <p>Empezamos rodando — una foodtruck negra recorriendo los eventos más interesantes de Barcelona — y aspiramos a quedarnos. Cada plato es una pequeña tentación. Caer en ella, un placer.</p>
+      </div>
+    </div>
+  </div>
+  <div class="manifesto__band reveal">
+    <div class="wrap">
+      <div class="manifesto__nums">
+        <div><strong>48h</strong><span>Fermentación masa</span></div>
+        <div><strong>450°</strong><span>Horno de piedra</span></div>
+        <div><strong>100%</strong><span>Producto italiano</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LA CARTA -->
+<section class="carta" id="carta">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow" style="margin-bottom:14px">La carta</div>
+        <h2>El menú</h2>
+      </div>
+      <p>Ingredientes de primera, elaboración artesanal. Cada plato es un pecado que merece la pena cometer.</p>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab is-active" data-tab="antipasti">Antipasti</button>
+      <button class="tab" data-tab="pastas">Pastas</button>
+      <button class="tab" data-tab="pizzas">Pizzas</button>
+      <button class="tab" data-tab="postres">Postres</button>
+      <button class="tab" data-tab="cocktails">Cocktails</button>
+      <button class="tab" data-tab="altri">Altri</button>
+    </div>
+
+    <div class="menu-pane is-active" id="pane-antipasti">
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="menu-item__name">Burrata con trufa</div><div class="menu-item__desc">Burrata fresca, aceite de trufa negra, rúcula, sal maldon.</div><div class="menu-item__tag">Vegetariano</div></div><div class="menu-item__price">€14</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Carpaccio di manzo</div><div class="menu-item__desc">Ternera madurada, parmigiano, alcaparras, limón.</div><div class="menu-item__tag">Temporada</div></div><div class="menu-item__price">€16</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Prosciutto e fichi</div><div class="menu-item__desc">Jamón de Parma 24 meses, higos frescos, miel de romero.</div></div><div class="menu-item__price">€15</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Frittura mista</div><div class="menu-item__desc">Fritura del día, alioli de ajo negro, limón confitado.</div><div class="menu-item__tag menu-item__tag--new">Nuevo</div></div><div class="menu-item__price">€13</div></div>
+      </div>
+    </div>
+
+    <div class="menu-pane" id="pane-pastas">
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="menu-item__name">Tagliatelle al ragú</div><div class="menu-item__desc">Pasta fresca al huevo, ragú de ternera y cerdo cocinado 6h.</div></div><div class="menu-item__price">€16</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Cacio e pepe</div><div class="menu-item__desc">Tonnarelli, pecorino romano DOP, pimienta Tellicherry.</div><div class="menu-item__tag">Vegetariano</div></div><div class="menu-item__price">€15</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Carbonara</div><div class="menu-item__desc">Spaghetti, guanciale, yema, pecorino. Sin nata, como manda la regla.</div></div><div class="menu-item__price">€16</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Spaghetti alle vongole</div><div class="menu-item__desc">Almejas frescas, ajo, vino blanco, perejil.</div></div><div class="menu-item__price">€18</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Pappardelle al cinghiale</div><div class="menu-item__desc">Pasta ancha, ragú de jabalí, hongos, vino tinto.</div><div class="menu-item__tag menu-item__tag--new">Nuevo</div></div><div class="menu-item__price">€18</div></div>
+      </div>
+    </div>
+
+    <div class="menu-pane" id="pane-pizzas">
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="menu-item__name">Margherita</div><div class="menu-item__desc">San Marzano DOP, fior di latte, albahaca, AOVE.</div></div><div class="menu-item__price">€12</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Diavola</div><div class="menu-item__desc">Tomate, mozzarella, salame piccante, miel infusionada.</div><div class="menu-item__tag">Picante</div></div><div class="menu-item__price">€14</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Tartufo</div><div class="menu-item__desc">Crema de trufa, mozzarella, parmigiano, huevo de corral.</div></div><div class="menu-item__price">€18</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Quattro formaggi</div><div class="menu-item__desc">Gorgonzola, fontina, parmigiano, mozzarella, nuez.</div><div class="menu-item__tag">Vegetariano</div></div><div class="menu-item__price">€15</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Peccato</div><div class="menu-item__desc">Nuestra firma: 'nduja, burrata, miel picante, cebolla caramelizada.</div><div class="menu-item__tag menu-item__tag--firma">Firma</div></div><div class="menu-item__price">€17</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Bianca</div><div class="menu-item__desc">Sin tomate. Mortadella, pistacho, stracciatella, limón.</div></div><div class="menu-item__price">€16</div></div>
+      </div>
+    </div>
+
+    <div class="menu-pane" id="pane-postres">
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="menu-item__name">Tiramisú</div><div class="menu-item__desc">Receta clásica. Mascarpone, café espresso, savoiardi.</div></div><div class="menu-item__price">€8</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Panna cotta</div><div class="menu-item__desc">Vainilla bourbon, frutos rojos macerados.</div></div><div class="menu-item__price">€7</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Cannolo siciliano</div><div class="menu-item__desc">Ricotta, naranja confitada, pistacho, chocolate.</div></div><div class="menu-item__price">€8</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Affogato Peccatore</div><div class="menu-item__desc">Helado fior di latte, espresso doble, amaretto.</div><div class="menu-item__tag menu-item__tag--new">Nuevo</div></div><div class="menu-item__price">€9</div></div>
+      </div>
+    </div>
+
+    <div class="menu-pane" id="pane-cocktails">
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="menu-item__name">Aperol Spritz</div><div class="menu-item__desc">Aperol, Prosecco, soda, naranja.</div></div><div class="menu-item__price">€8</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Negroni Sbagliato</div><div class="menu-item__desc">Campari, vermut rojo, Prosecco. La versión "equivocada", la mejor.</div><div class="menu-item__tag menu-item__tag--firma">Firma</div></div><div class="menu-item__price">€10</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Bellini</div><div class="menu-item__desc">Prosecco, puré de melocotón blanco. Receta del Harry's Bar.</div></div><div class="menu-item__price">€9</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Espresso Martini</div><div class="menu-item__desc">Vodka, licor de café, espresso recién hecho. Crema espesa.</div></div><div class="menu-item__price">€10</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Hugo</div><div class="menu-item__desc">Prosecco, sirope de saúco, menta, lima.</div></div><div class="menu-item__price">€8</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Limoncello Sour</div><div class="menu-item__desc">Limoncello casero, gin, lima, clara montada.</div><div class="menu-item__tag menu-item__tag--new">Nuevo</div></div><div class="menu-item__price">€9</div></div>
+      </div>
+    </div>
+
+    <div class="menu-pane" id="pane-altri">
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="menu-item__name">Focaccia al rosmarino</div><div class="menu-item__desc">Focaccia recién horneada, romero fresco, AOVE, sal gruesa.</div></div><div class="menu-item__price">€6</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Risotto al nero</div><div class="menu-item__desc">Carnaroli, tinta de calamar, gambón rojo, lima.</div><div class="menu-item__tag menu-item__tag--firma">Firma</div></div><div class="menu-item__price">€19</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Insalata della casa</div><div class="menu-item__desc">Hojas amargas, parmigiano, pera, nuez, vinagreta de mostaza.</div><div class="menu-item__tag">Vegetariano</div></div><div class="menu-item__price">€9</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Lambrusco di Sorbara</div><div class="menu-item__desc">Vino. Burbuja natural, fresco, ligero. Emilia-Romaña.</div></div><div class="menu-item__price">€6 / €28</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Chianti Classico Riserva</div><div class="menu-item__desc">Vino. Sangiovese 100%, taninos sedosos. Toscana.</div></div><div class="menu-item__price">€9 / €38</div></div>
+        <div class="menu-item"><div><div class="menu-item__name">Greco di Tufo</div><div class="menu-item__desc">Vino. Blanco volcánico, mineral. Campania.</div></div><div class="menu-item__price">€7 / €32</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LA FOODTRUCK -->
+<section class="experience" id="truck">
+  <div class="experience__layout">
+    <div class="experience__media reveal">
+      <img src="https://images.unsplash.com/photo-1593504049359-74330189a345?w=1400&q=80" alt="Pizza saliendo del horno de piedra" />
+    </div>
+    <div class="experience__text reveal">
+      <div class="eyebrow">La foodtruck</div>
+      <h2><em>Pizza sobre ruedas</em>El pecado va donde tú estás</h2>
+      <p>Una foodtruck negra, un horno de piedra y la mejor masa fermentada 48 horas. Llevamos Peccatore a festivales, bodas privadas y eventos de marca por toda Cataluña.</p>
+      <ul class="experience__list">
+        <li>Festivales y conciertos</li>
+        <li>Bodas y eventos privados</li>
+        <li>Mercados gastronómicos</li>
+        <li>Activaciones de marca</li>
+      </ul>
+      <div class="experience__cta">
+        <a href="mailto:info@peccatore.es?subject=Reserva%20foodtruck%20Peccatore&body=Hola%2C%20me%20gustar%C3%ADa%20reservar%20la%20foodtruck%20para%20un%20evento.%0A%0AFecha%3A%0AUbicaci%C3%B3n%3A%0APersonas%20aprox%3A%0ATipo%20de%20evento%3A" class="btn btn--red">Reservar la foodtruck
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section class="ig" id="instagram">
+  <div class="wrap">
+    <!-- Tarjeta de perfil — refleja el Instagram real @peccatore.bcn.
+         Actualiza los números (publicaciones/seguidores) cuando cambien.
+         Para usar el logo real: cambia <span>P</span> por <img src="logo.png"/>. -->
+    <div class="ig__card reveal">
+      <div class="ig__avatar">
+        <img src="logo.png" alt="Peccatore" onerror="if(this.src.indexOf('logo.png')>-1){this.src='logo.jpg'}else{this.remove()}" />
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g fill="#f1e8d6">
+            <path d="M41 26 h17 v68 q0 6 -8.5 6 q-8.5 0 -8.5 -6 z"/>
+            <path d="M52 26 h13 a24 24 0 0 1 0 48 h-13 v-14 h13 a10 10 0 0 0 0 -20 h-13 z"/>
+          </g>
+        </svg>
+      </div>
+      <div class="ig__info">
+        <div class="ig__row1">
+          <div class="ig__name">peccatore.bcn</div>
+          <a href="https://instagram.com/peccatore.bcn" target="_blank" rel="noopener" class="ig__follow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+            Seguir
+          </a>
+        </div>
+        <div class="ig__stats">
+          <div><strong>9</strong> publicaciones</div>
+          <div><strong>29</strong> seguidores</div>
+          <div><strong>9</strong> seguidos</div>
+        </div>
+        <div class="ig__cat">Restaurante</div>
+        <div class="ig__bio">Peccatore | Pizza, Pasta &amp; Antipasti<br/><em>The art of temptation.</em> · Barcelona</div>
+      </div>
+    </div>
+
+    <!-- Feed (placeholder · ver instrucciones en el CSS para activar la auto-actualización con Behold.so) -->
+    <div class="ig__grid reveal-stagger">
+      <a href="https://instagram.com/peccatore.bcn" target="_blank" rel="noopener" class="ig__post">
+        <span class="ig__type"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg></span>
+        <img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=800&q=80" alt="Masa de pizza" loading="lazy"/>
+        <div class="ig__overlay">
+          <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>112</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>8</span>
+        </div>
+      </a>
+      <a href="https://instagram.com/peccatore.bcn" target="_blank" rel="noopener" class="ig__post">
+        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80" alt="Pizza margherita" loading="lazy"/>
+        <div class="ig__overlay">
+          <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>147</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>12</span>
+        </div>
+      </a>
+      <a href="https://instagram.com/peccatore.bcn" target="_blank" rel="noopener" class="ig__post">
+        <span class="ig__type"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="9" cy="9" r="1.5" fill="currentColor"/></svg></span>
+        <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=800&q=80" alt="Pasta" loading="lazy"/>
+        <div class="ig__overlay">
+          <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>98</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>5</span>
+        </div>
+      </a>
+      <a href="https://instagram.com/peccatore.bcn" target="_blank" rel="noopener" class="ig__post">
+        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&q=80" alt="Pizza diavola" loading="lazy"/>
+        <div class="ig__overlay">
+          <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>203</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>19</span>
+        </div>
+      </a>
+      <a href="https://instagram.com/peccatore.bcn" target="_blank" rel="noopener" class="ig__post">
+        <span class="ig__type"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg></span>
+        <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=800&q=80" alt="Carbonara" loading="lazy"/>
+        <div class="ig__overlay">
+          <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>176</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>14</span>
+        </div>
+      </a>
+      <a href="https://instagram.com/peccatore.bcn" target="_blank" rel="noopener" class="ig__post">
+        <img src="https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?w=800&q=80" alt="Pizza Peccato" loading="lazy"/>
+        <div class="ig__overlay">
+          <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>189</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>22</span>
+        </div>
+      </a>
+      <a href="https://instagram.com/peccatore.bcn" target="_blank" rel="noopener" class="ig__post">
+        <span class="ig__type"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="9" cy="9" r="1.5" fill="currentColor"/></svg></span>
+        <img src="https://images.unsplash.com/photo-1593504049359-74330189a345?w=800&q=80" alt="Pizza en horno de piedra" loading="lazy"/>
+        <div class="ig__overlay">
+          <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>134</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>9</span>
+        </div>
+      </a>
+      <a href="https://instagram.com/peccatore.bcn" target="_blank" rel="noopener" class="ig__post">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80" alt="Pizza artesanal" loading="lazy"/>
+        <div class="ig__overlay">
+          <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>156</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>11</span>
+        </div>
+      </a>
+      <a href="https://instagram.com/peccatore.bcn" target="_blank" rel="noopener" class="ig__post">
+        <span class="ig__type"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg></span>
+        <img src="https://images.unsplash.com/photo-1542528180-a1208c5169a5?w=800&q=80" alt="Detalle de plato" loading="lazy"/>
+        <div class="ig__overlay">
+          <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>121</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>7</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="ig__foot">
+      <a href="https://instagram.com/peccatore.bcn" target="_blank" rel="noopener" class="btn btn--ghost">Ver perfil completo en Instagram
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- EN GIRA — LA RUTA -->
+<section class="ruta" id="ruta">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow" style="margin-bottom:14px">Dónde encontrarnos</div>
+        <h2>En gira</h2>
+      </div>
+      <p>La foodtruck no para. Estas son las próximas paradas — festivales, mercados y eventos por toda Cataluña.</p>
+    </div>
+
+    <div class="ruta__list reveal">
+      <div class="ruta__row" data-img="https://images.unsplash.com/photo-1565299543923-37dd37887442?w=520&q=80">
+        <div class="ruta__date">Sáb 14 Jun</div>
+        <div class="ruta__name">Palo Alto Market</div>
+        <div class="ruta__place">Poblenou · Barcelona</div>
+        <div class="ruta__tag">Mercado</div>
+      </div>
+      <div class="ruta__row" data-img="https://images.unsplash.com/photo-1593504049359-74330189a345?w=520&q=80">
+        <div class="ruta__date">Vie 20 Jun</div>
+        <div class="ruta__name">Festival Cruïlla</div>
+        <div class="ruta__place">Parc del Fòrum · Barcelona</div>
+        <div class="ruta__tag">Festival</div>
+      </div>
+      <div class="ruta__row" data-img="https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=520&q=80">
+        <div class="ruta__date">Sáb 28 Jun</div>
+        <div class="ruta__name">Boda privada</div>
+        <div class="ruta__place">Masía · Empordà</div>
+        <div class="ruta__tag">Privado</div>
+      </div>
+      <div class="ruta__row" data-img="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=520&q=80">
+        <div class="ruta__date">Dom 6 Jul</div>
+        <div class="ruta__name">Eat Street BCN</div>
+        <div class="ruta__place">Sant Andreu · Barcelona</div>
+        <div class="ruta__tag">Street food</div>
+      </div>
+      <div class="ruta__row" data-img="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=520&q=80">
+        <div class="ruta__date">Vie 18 Jul</div>
+        <div class="ruta__name">Festival Vida</div>
+        <div class="ruta__place">Vilanova i la Geltrú</div>
+        <div class="ruta__tag">Festival</div>
+      </div>
+      <div class="ruta__row" data-img="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=520&q=80">
+        <div class="ruta__date">Sáb 2 Ago</div>
+        <div class="ruta__name">Brunch Market</div>
+        <div class="ruta__place">Gràcia · Barcelona</div>
+        <div class="ruta__tag">Mercado</div>
+      </div>
+    </div>
+
+    <div class="ruta__foot reveal">
+      <p>¿Organizas un evento? <em>Llevamos la foodtruck donde tú digas.</em></p>
+      <a href="mailto:info@peccatore.es?subject=Reserva%20foodtruck%20Peccatore&body=Hola%2C%20me%20gustar%C3%ADa%20reservar%20la%20foodtruck%20para%20un%20evento.%0A%0AFecha%3A%0AUbicaci%C3%B3n%3A%0APersonas%20aprox%3A%0ATipo%20de%20evento%3A" class="btn btn--red">Reservar la foodtruck
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DIARIO VISUAL -->
+<section class="gallery">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow" style="margin-bottom:14px">Diario visual</div>
+        <h2>Detrás del fuego</h2>
+      </div>
+      <p>Pequeños momentos que componen la cocina. Lo que ves es lo que hay.</p>
+    </div>
+    <div class="gallery__strip reveal-stagger">
+      <div data-label="Masa · 48h"><img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=900&q=80" alt="Masa de pizza" loading="lazy"/></div>
+      <div data-label="Margherita"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=900&q=80" alt="Pizza margherita" loading="lazy"/></div>
+      <div data-label="Carbonara"><img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=900&q=80" alt="Pasta carbonara" loading="lazy"/></div>
+      <div data-label="Diavola"><img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=900&q=80" alt="Pizza diavola" loading="lazy"/></div>
+      <div data-label="Tagliatelle"><img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=900&q=80" alt="Tagliatelle" loading="lazy"/></div>
+      <div data-label="Horno"><img src="https://images.unsplash.com/photo-1593504049359-74330189a345?w=900&q=80" alt="Pizza en horno" loading="lazy"/></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA: RESERVA + PIDE AHORA -->
+<section class="cta" id="cta">
+  <div class="cta__block cta__block--red reveal">
+    <h2 class="cta__title"><em>Vive la tentación</em>Reserva</h2>
+    <p class="cta__desc">Disponibilidad gestionada en tiempo real. Confirma tu mesa en menos de 30 segundos.</p>
+    <a href="https://www.thefork.es" target="_blank" rel="noopener" class="btn btn--dark">Reservar con TheFork
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <div class="cta__sub">Powered by TheFork · Confirmación inmediata</div>
+  </div>
+  <div class="cta__block cta__block--dark reveal">
+    <h2 class="cta__title"><em>Pecado a domicilio</em>Pide ahora</h2>
+    <p class="cta__desc">Pizza napolitana y pasta artesanal en tu casa. Take away y delivery con Glovo.</p>
+    <a href="https://glovoapp.com" target="_blank" rel="noopener" class="btn btn--red">Pedir con Glovo
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <div class="cta__sub">Solo Glovo · Barcelona</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="foot__top">
+    <div class="foot__brand">
+      <div class="h-display">PECCATORE</div>
+      <p>The Art of Temptation</p>
+      <small>Pasta artesanal, pizza napolitana y vinos seleccionados. Foodtruck, eventos privados y delivery en Barcelona.</small>
+    </div>
+    <div class="foot__col">
+      <h4>Cocina</h4>
+      <ul>
+        <li><a href="#carta">La carta</a></li>
+        <li><a href="#cta">Pide ahora</a></li>
+      </ul>
+    </div>
+    <div class="foot__col">
+      <h4>Visítanos</h4>
+      <ul>
+        <li><a href="#truck">La foodtruck</a></li>
+        <li><a href="#ruta">La ruta · En gira</a></li>
+        <li><a href="#cta">Reservas</a></li>
+        <li><a href="#instagram">Instagram</a></li>
+      </ul>
+    </div>
+    <div class="foot__col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="https://instagram.com/peccatore.bcn" target="_blank">@peccatore.bcn</a></li>
+        <li><a href="mailto:info@peccatore.es">info@peccatore.es</a></li>
+        <li>+34 93 000 00 00</li>
+        <li>Barcelona</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot__bottom">
+    <div>© 2026 Peccatore · Barcelona</div>
+    <div class="foot__social">
+      <a href="https://instagram.com/peccatore.bcn" target="_blank" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+      </a>
+      <a href="#" aria-label="TikTok">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 8.5a6 6 0 0 1-3.5-1.1V15a5 5 0 1 1-5-5v3a2 2 0 1 0 2 2V3h2.5a4 4 0 0 0 4 4v1.5z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* LOADER */
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('loader').classList.add('is-done'),1400)});
+
+/* VH FIX */
+function vh(){document.documentElement.style.setProperty('--vh', window.innerHeight+'px')}
+vh(); window.addEventListener('resize',vh);
+
+/* NAV SCROLL + LIGHT MODE */
+const nav=document.getElementById('nav');
+const lightSections=['manifesto','carta'].map(id=>document.getElementById(id)).filter(Boolean);
+function navState(){
+  const y=window.scrollY;
+  nav.classList.toggle('is-scrolled', y>40);
+  let onLight=false;
+  for(const s of lightSections){
+    const r=s.getBoundingClientRect();
+    if(r.top<=80 && r.bottom>=80){onLight=true;break}
+  }
+  nav.classList.toggle('is-light', onLight);
+}
+window.addEventListener('scroll',navState,{passive:true});
+navState();
+
+/* REVEAL */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target)}}),{threshold:.15,rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('.reveal, .reveal-stagger').forEach(el=>io.observe(el));
+
+/* TABS */
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    const id=tab.dataset.tab;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('is-active', t===tab));
+    document.querySelectorAll('.menu-pane').forEach(p=>p.classList.toggle('is-active', p.id===`pane-${id}`));
+  });
+});
+
+/* HERO PARALLAX */
+const heroVideo=document.querySelector('.hero__video');
+const heroPoster=document.querySelector('.hero__poster');
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  if(y<window.innerHeight){
+    if(heroVideo) heroVideo.style.transform=`translateY(${y*.18}px) scale(1.04)`;
+    if(heroPoster) heroPoster.style.transform=`translateY(${y*.18}px) scale(1.04)`;
+  }
+},{passive:true});
+
+/* SMOOTH ANCHORS */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',ev=>{
+    const id=a.getAttribute('href').slice(1);
+    const t=document.getElementById(id);
+    if(t){ev.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
+  });
+});
+</script>
+</body>
+</html>
